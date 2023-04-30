@@ -1,0 +1,102 @@
+Sub StockMarket()
+    
+        For Each ws In Worksheets
+        
+        'Setting up the page with necessary declarations
+        Dim tickername As String
+    
+        Dim tickervolume As Double
+        tickervolume = 0
+        
+        Dim summary_ticker_row As Integer
+        summary_ticker_row = 2
+        
+        Dim open_price As Double
+        open_price = ws.Cells(2, 3).Value
+        
+        'Define last row for column A
+        Lastrow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+        
+        Dim close_price As Double
+        Dim yearly_change As Double
+        Dim percent_change As Double
+        
+
+
+        'Setting up loop
+        For i = 2 To Lastrow
+            'Look for cells that differ from the cell below it
+            If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+              'Set ticker name and ticker volume
+              tickername = ws.Cells(i, 1).Value
+              tickervolume = tickervolume + ws.Cells(i, 7).Value
+              'Write ticker name in column i
+              ws.Range("I" & summary_ticker_row).Value = tickername
+              'Write ticker volume in column l
+              ws.Range("L" & summary_ticker_row).Value = tickervolume
+
+              close_price = ws.Cells(i, 6).Value
+
+              yearly_change = close_price - open_price
+              
+              ws.Range("J" & summary_ticker_row).Value = yearly_change
+                'Setting rule/equation for percent change
+                If open_price = 0 Then
+                    percent_change = 0
+                Else
+                    percent_change = yearly_change / open_price
+                End If
+
+              ws.Range("K" & summary_ticker_row).Value = percent_change
+              ws.Range("K" & summary_ticker_row).NumberFormat = "0.00%"
+   
+              summary_ticker_row = summary_ticker_row + 1
+
+              tickervolume = 0
+
+              open_price = ws.Cells(i + 1, 3)
+            
+            Else
+              
+              tickervolume = tickervolume + ws.Cells(i, 7).Value
+
+              lastrow_summary_table = ws.Cells(Rows.Count, 9).End(xlUp).Row
+            
+            End If
+        
+        Next i
+
+    
+    'add color coding
+    For i = 2 To lastrow_summary_table
+            If ws.Cells(i, 10).Value > 0 Then
+                ws.Cells(i, 10).Interior.ColorIndex = 10
+            Else
+                ws.Cells(i, 10).Interior.ColorIndex = 3
+        
+            End If
+    
+            
+            'Adding greatest percent increase and decrease and highest total volume
+            If ws.Cells(i, 11).Value = Application.WorksheetFunction.Max(ws.Range("K2:K" & lastrow_summary_table)) Then
+                ws.Cells(2, 16).Value = ws.Cells(i, 9).Value
+                ws.Cells(2, 17).Value = ws.Cells(i, 11).Value
+                ws.Cells(2, 17).NumberFormat = "0.00%"
+
+            ElseIf ws.Cells(i, 11).Value = Application.WorksheetFunction.Min(ws.Range("K2:K" & lastrow_summary_table)) Then
+                ws.Cells(3, 16).Value = ws.Cells(i, 9).Value
+                ws.Cells(3, 17).Value = ws.Cells(i, 11).Value
+                ws.Cells(3, 17).NumberFormat = "0.00%"
+            
+            ElseIf ws.Cells(i, 12).Value = Application.WorksheetFunction.Max(ws.Range("L2:L" & lastrow_summary_table)) Then
+                ws.Cells(4, 16).Value = ws.Cells(i, 9).Value
+                ws.Cells(4, 17).Value = ws.Cells(i, 12).Value
+                
+            End If
+            
+    Next i
+    
+    Next ws
+    
+    
+End Sub
