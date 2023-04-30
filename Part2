@@ -12,12 +12,12 @@ Sub StockMarket()
         Dim open_price As Double
         open_price = Cells(2, 3).Value
         
+        'Define last row for column A
+        Lastrow = Cells(Rows.Count, 1).End(xlUp).Row
+        
         Dim close_price As Double
         Dim yearly_change As Double
         Dim percent_change As Double
-        
-       'Define last row for column A
-        Lastrow = Cells(Rows.Count, 1).End(xlUp).Row
 
 
         'Setting up loop
@@ -34,7 +34,7 @@ Sub StockMarket()
 
               close_price = Cells(i, 6).Value
 
-              yearly_change = (close_price - open_price)
+              yearly_change = close_price - open_price
               
               Range("J" & summary_ticker_row).Value = yearly_change
                 'Setting rule/equation for percent change
@@ -91,5 +91,6 @@ Sub StockMarket()
             End If
             
     Next i
+
 
 End Sub
