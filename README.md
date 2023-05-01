@@ -9,6 +9,7 @@ File Part 3 loops the information above through all the worksheets in the workbo
 
 Sources
   AskBCS
-  https://stackoverflow.com/questions/62471422/vba-loop-how-to-get-ticker-symbols-into-ticker-column
+ 
+ https://stackoverflow.com/questions/62471422/vba-loop-how-to-get-ticker-symbols-into-ticker-column
   https://stackoverflow.com/questions/48828163/stock-ticker-loop
   
